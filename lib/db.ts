@@ -141,14 +141,35 @@ export function getSettings(): UserSettings {
         apiKey: '',
         defaultModel: 'claude-3-sonnet-20240229',
       },
+      deepseek: {
+        enabled: false,
+        apiKey: '',
+        defaultModel: 'deepseek-chat',
+      },
+      openrouter: {
+        enabled: false,
+        apiKey: '',
+        defaultModel: 'anthropic/claude-3.5-sonnet',
+      },
+      gemini: {
+        enabled: false,
+        apiKey: '',
+        defaultModel: 'gemini-1.5-flash',
+      },
     },
     defaultProvider: 'openai',
+    defaultModel: 'gpt-4',
     defaultTemperature: 0.7,
     maxTokens: 4096,
     theme: 'system',
     language: 'zh',
     dataVersion: '1.0',
   };
+
+  // 仅在客户端执行
+  if (typeof window === 'undefined') {
+    return defaultSettings;
+  }
 
   try {
     const stored = localStorage.getItem(SETTINGS_KEY);
@@ -163,6 +184,9 @@ export function getSettings(): UserSettings {
 }
 
 export function saveSettings(settings: UserSettings): void {
+  if (typeof window === 'undefined') {
+    return;
+  }
   localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
 }
 

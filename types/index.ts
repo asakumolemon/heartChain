@@ -54,6 +54,7 @@ export interface StepResult {
   status: 'pending' | 'running' | 'streaming' | 'completed' | 'failed';
   input: string;
   output?: string;
+  partialOutput?: string;
   promptRendered: string;
   tokensUsed?: number;
   startedAt: string;
@@ -76,9 +77,13 @@ export interface UserSettings {
     openai?: ProviderConfig;
     anthropic?: ProviderConfig;
     azure?: AzureConfig;
+    deepseek?: ProviderConfig;
+    openrouter?: ProviderConfig;
+    gemini?: ProviderConfig;
     custom?: CustomProviderConfig[];
   };
   defaultProvider: string;
+  defaultModel: string;
   defaultTemperature: number;
   maxTokens: number;
   theme: 'light' | 'dark' | 'system';
@@ -99,7 +104,10 @@ export interface AzureConfig extends ProviderConfig {
 }
 
 export interface CustomProviderConfig extends ProviderConfig {
+  id: string;
   name: string;
+  baseUrl: string;
+  apiFormat: 'openai' | 'anthropic' | 'gemini' | 'custom';
 }
 
 // 导出数据格式

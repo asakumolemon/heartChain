@@ -24,3 +24,51 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* 流式脉冲动画 */
+@keyframes streaming-pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 1px rgba(147, 51, 234, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 0 4px rgba(147, 51, 234, 0.3);
+  }
+}
+
+.animate-streaming-pulse {
+  animation: streaming-pulse 2s ease-in-out infinite;
+}
+
+/* 加载动画 */
+@keyframes loading-slide {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(350%); }
+}
+
+.loading-bar::after {
+  content: '';
+  display: block;
+  height: 100%;
+  width: 30%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
+  animation: loading-slide 1.5s ease-in-out infinite;
+}
+
+/* 滚动条样式 */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
