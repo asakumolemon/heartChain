@@ -478,7 +478,7 @@ export function ProviderManagement() {
 
       {/* 添加自定义供应商对话框 */}
       <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
-        <DialogContent className="sm:max-w-[500px]">
+        <DialogContent className="w-[calc(100vw-2rem)] sm:max-w-[500px]">
           <DialogHeader>
             <DialogTitle>添加自定义供应商</DialogTitle>
             <DialogDescription>
@@ -577,7 +577,7 @@ export function ProviderManagement() {
         open={!!editingCustomProvider}
         onOpenChange={(open) => !open && setEditingCustomProvider(null)}
       >
-        <DialogContent className="sm:max-w-[500px]">
+        <DialogContent className="w-[calc(100vw-2rem)] sm:max-w-[500px]">
           <DialogHeader>
             <DialogTitle>编辑供应商</DialogTitle>
             <DialogDescription>修改供应商配置信息</DialogDescription>

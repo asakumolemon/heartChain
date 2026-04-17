@@ -329,7 +329,7 @@ export function ModelManagement() {
 
       {/* 添加模型对话框 */}
       <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
-        <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
+        <DialogContent className="w-[calc(100vw-2rem)] sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>添加模型</DialogTitle>
             <DialogDescription>配置新的 AI 模型</DialogDescription>
@@ -526,7 +526,7 @@ export function ModelManagement() {
         open={!!editingModel}
         onOpenChange={(open) => !open && setEditingModel(null)}
       >
-        <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
+        <DialogContent className="w-[calc(100vw-2rem)] sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>编辑模型</DialogTitle>
             <DialogDescription>修改模型配置参数</DialogDescription>

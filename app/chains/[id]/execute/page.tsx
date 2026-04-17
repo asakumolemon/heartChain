@@ -54,24 +54,24 @@ export default function ExecuteChainPage() {
   return (
     <div className="max-w-4xl mx-auto">
       {/* 导航栏 */}
-      <div className="flex items-center justify-between mb-6">
-        <div className="flex items-center gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+        <div className="flex items-center gap-2 sm:gap-4">
           <Link
             href="/"
-            className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900"
+            className="inline-flex items-center gap-1 sm:gap-2 text-gray-600 hover:text-gray-900"
           >
             <ArrowLeft className="w-4 h-4" />
-            返回
+            <span className="hidden sm:inline">返回</span>
           </Link>
-          <h1 className="text-2xl font-bold text-gray-900">{chain.name}</h1>
+          <h1 className="text-xl sm:text-2xl font-bold text-gray-900 truncate">{chain.name}</h1>
         </div>
         <div className="flex items-center gap-2">
           <Link
             href={`/chains/${chainId}`}
-            className="flex items-center gap-2 px-3 py-1.5 text-sm text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
+            className="flex items-center gap-1 sm:gap-2 px-3 py-1.5 text-sm text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
           >
             <Settings className="w-4 h-4" />
-            编辑
+            <span className="hidden sm:inline">编辑</span>
           </Link>
         </div>
       </div>

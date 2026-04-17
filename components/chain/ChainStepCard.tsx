@@ -154,7 +154,7 @@ export function ChainStepCard({
 
       {/* 详情弹窗 */}
       <Dialog open={isDetailOpen} onOpenChange={setIsDetailOpen}>
-        <DialogContent className="max-w-3xl max-h-[85vh] overflow-y-auto overflow-x-hidden">
+        <DialogContent className="w-[calc(100vw-2rem)] sm:max-w-3xl max-h-[85vh] overflow-y-auto overflow-x-hidden p-4 sm:p-6">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-3">
               <span

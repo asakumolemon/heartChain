@@ -25,27 +25,27 @@ export function ChainCard({ chain, onDelete }: ChainCardProps) {
           </div>
         </div>
 
-        <div className="flex items-center gap-1 ml-4">
+        <div className="flex items-center gap-1 ml-2 sm:ml-4">
           <Link
             href={`/chains/${chain.id}/execute`}
-            className="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors"
+            className="p-2 sm:p-2.5 text-green-600 hover:bg-green-50 rounded-lg transition-colors"
             title="执行"
           >
-            <Play className="w-4 h-4" />
+            <Play className="w-5 h-5 sm:w-4 sm:h-4" />
           </Link>
           <Link
             href={`/chains/${chain.id}`}
-            className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+            className="p-2 sm:p-2.5 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
             title="编辑"
           >
-            <Edit className="w-4 h-4" />
+            <Edit className="w-5 h-5 sm:w-4 sm:h-4" />
           </Link>
           <button
             onClick={onDelete}
-            className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+            className="p-2 sm:p-2.5 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
             title="删除"
           >
-            <Trash2 className="w-4 h-4" />
+            <Trash2 className="w-5 h-5 sm:w-4 sm:h-4" />
           </button>
         </div>
       </div>
