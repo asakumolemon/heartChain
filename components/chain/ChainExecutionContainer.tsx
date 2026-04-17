@@ -4,8 +4,9 @@ import { useState, useCallback } from 'react';
 import { Chain, Execution, StepUpdate } from '@/types';
 import { ChainExecutor, createExecutor } from '@/lib/executor';
 import { ChainStepCard } from './ChainStepCard';
-import { Loader2, Play, Square, RotateCcw, Settings } from 'lucide-react';
+import { Loader2, Play, Square, RotateCcw, Settings, Copy, Check } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
 
 interface ChainExecutionContainerProps {
   chain: Chain;
@@ -19,6 +20,7 @@ export function ChainExecutionContainer({ chain, onExecutionComplete }: ChainExe
   const [stepUpdates, setStepUpdates] = useState<Record<number, StepUpdate>>({});
   const [executor, setExecutor] = useState<ChainExecutor | null>(null);
   const [activeStepIndex, setActiveStepIndex] = useState<number | null>(null);
+  const [copied, setCopied] = useState(false);
 
   const handleStepUpdate = useCallback((stepIndex: number, update: StepUpdate) => {
     setStepUpdates((prev) => ({
@@ -72,6 +74,16 @@ export function ChainExecutionContainer({ chain, onExecutionComplete }: ChainExe
   };
 
   const sortedSteps = [...chain.steps].sort((a, b) => a.order - b.order);
+
+  const copyToClipboard = async (text: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (error) {
+      console.error('Failed to copy:', error);
+    }
+  };
 
   return (
     <div className="space-y-6">
@@ -160,8 +172,28 @@ export function ChainExecutionContainer({ chain, onExecutionComplete }: ChainExe
       {/* 最终结果 */}
       {execution?.output && execution.status === 'completed' && (
         <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-          <h3 className="font-medium text-green-900 mb-2">执行完成</h3>
-          <div className="bg-white rounded p-3 text-gray-700 whitespace-pre-wrap">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="font-medium text-green-900">执行完成</h3>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => copyToClipboard(execution.output || '')}
+              className="h-8 gap-1.5 bg-white hover:bg-green-100 border-green-300 text-green-800"
+            >
+              {copied ? (
+                <>
+                  <Check className="w-4 h-4" />
+                  已复制
+                </>
+              ) : (
+                <>
+                  <Copy className="w-4 h-4" />
+                  复制结果
+                </>
+              )}
+            </Button>
+          </div>
+          <div className="bg-white rounded p-3 text-gray-700 whitespace-pre-wrap border border-green-100">
             {execution.output}
           </div>
           {execution.durationMs && (

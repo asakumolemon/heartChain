@@ -82,6 +82,7 @@ export interface UserSettings {
     gemini?: ProviderConfig;
     custom?: CustomProviderConfig[];
   };
+  models?: ModelConfig[];
   defaultProvider: string;
   defaultModel: string;
   defaultTemperature: number;
@@ -133,6 +134,8 @@ export interface StepUpdate {
   token?: string;
   partialOutput?: string;
   output?: string;
+  input?: string;
+  promptRendered?: string;
   error?: string;
 }
 
@@ -143,4 +146,35 @@ export interface ChainTemplate {
   description: string;
   category: string;
   chain: Omit<Chain, 'id' | 'createdAt' | 'updatedAt'>;
+}
+
+// 模型配置
+export interface ModelConfig {
+  id: string;
+  providerId: string;
+  name: string;
+  displayName: string;
+  enabled: boolean;
+  contextWindow?: number;
+  maxTokens?: number;
+  defaultTemperature?: number;
+  topP?: number;
+  frequencyPenalty?: number;
+  presencePenalty?: number;
+  description?: string;
+  isCustom: boolean;
+}
+
+// 供应商分组
+export type ProviderCategory = 'builtin' | 'custom';
+
+export interface ProviderGroup {
+  id: ProviderCategory;
+  name: string;
+  description: string;
+}
+
+// 扩展用户设置
+export interface UserSettingsExtended extends UserSettings {
+  models: ModelConfig[];
 }

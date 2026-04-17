@@ -76,6 +76,14 @@ export class ChainExecutor {
         });
         stepResult.promptRendered = prompt;
 
+        // 发送包含 input 和 promptRendered 的更新，让前端可以查看发送的消息
+        onStepUpdate(i, {
+          status: 'running',
+          input: stepInput,
+          promptRendered: prompt,
+        });
+        await this.persist();
+
         // 执行步骤
         try {
           let output = '';

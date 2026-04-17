@@ -29,7 +29,7 @@ export default function RootLayout({
       >
         <div className="min-h-screen">
           {/* 顶部导航 */}
-          <header className="bg-white border-b border-gray-200 sticky top-0 z-50">
+          <header className="bg-white border-b border-gray-200 sticky top-0 z-40">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <div className="flex items-center justify-between h-16">
                 <a href="/" className="flex items-center gap-2">
@@ -50,6 +50,12 @@ export default function RootLayout({
                     className="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium"
                   >
                     设置
+                  </a>
+                  <a
+                    href="/help"
+                    className="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium"
+                  >
+                    使用帮助
                   </a>
                 </nav>
               </div>
