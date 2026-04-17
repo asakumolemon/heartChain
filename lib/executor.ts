@@ -63,8 +63,8 @@ export class ChainExecutor {
         const stepInput = this.buildStepInput(step, currentInput, results);
         stepResult.input = stepInput;
 
-        // 渲染 Prompt
-        const prompt = this.renderPrompt(step.systemPrompt, {
+        // 渲染系统提示词
+        const systemPrompt = this.renderPrompt(step.systemPrompt, {
           input: stepInput,
           original_input: this.state.input,
           step: i + 1,
@@ -74,13 +74,28 @@ export class ChainExecutor {
           is_first: i === 0,
           is_last: i === this.chain.steps.length - 1,
         });
-        stepResult.promptRendered = prompt;
+
+        // 渲染用户消息（如果未设置则使用输入内容）
+        const userPrompt = step.userPrompt
+          ? this.renderPrompt(step.userPrompt, {
+              input: stepInput,
+              original_input: this.state.input,
+              step: i + 1,
+              total_steps: this.chain.steps.length,
+              prev_result: results[i - 1] || '',
+              history: results.join('\n\n'),
+              is_first: i === 0,
+              is_last: i === this.chain.steps.length - 1,
+            })
+          : stepInput;
+
+        stepResult.promptRendered = systemPrompt;
 
         // 发送包含 input 和 promptRendered 的更新，让前端可以查看发送的消息
         onStepUpdate(i, {
           status: 'running',
-          input: stepInput,
-          promptRendered: prompt,
+          input: userPrompt,
+          promptRendered: systemPrompt,
         });
         await this.persist();
 
@@ -102,7 +117,10 @@ export class ChainExecutor {
             provider,
             {
               model,
-              messages: [{ role: 'system', content: prompt }],
+              messages: [
+                { role: 'system', content: systemPrompt },
+                { role: 'user', content: userPrompt },
+              ],
               temperature,
               maxTokens: defaultSettings.maxTokens,
               stream: true,

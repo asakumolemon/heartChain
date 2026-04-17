@@ -71,13 +71,29 @@ export function StepEditor({ step, index, onChange, onDelete, dragHandleProps }:
           {/* 系统提示词 */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              系统提示词
+              系统提示词 (System)
             </label>
             <textarea
               value={step.systemPrompt}
               onChange={(e) => updateField('systemPrompt', e.target.value)}
-              placeholder="输入系统提示词，可使用 {input} {original_input} 等变量..."
-              className="w-full h-32 p-3 border border-gray-300 rounded-lg resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              placeholder="输入系统提示词，定义 AI 的角色和任务..."
+              className="w-full h-24 p-3 border border-gray-300 rounded-lg resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            />
+            <p className="text-xs text-gray-500 mt-1">
+              定义 AI 的角色、任务要求和输出格式
+            </p>
+          </div>
+
+          {/* 用户消息 */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              用户消息 (User)
+            </label>
+            <textarea
+              value={step.userPrompt || ''}
+              onChange={(e) => updateField('userPrompt', e.target.value)}
+              placeholder="输入用户消息内容，可使用 {input} {original_input} 等变量..."
+              className="w-full h-24 p-3 border border-gray-300 rounded-lg resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
             <p className="text-xs text-gray-500 mt-1">
               可用变量: {'{input}'}, {'{original_input}'}, {'{step}'}, {'{total_steps}'}, {'{prev_result}'}, {'{history}'}

@@ -14,6 +14,7 @@ export interface Step {
   id: string;
   name: string;
   systemPrompt: string;
+  userPrompt?: string;
   inputStrategy: 'last_result' | 'original' | 'original_with_context' | 'cumulative';
   model?: string;
   temperature?: number;

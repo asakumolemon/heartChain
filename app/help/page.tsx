@@ -109,7 +109,7 @@ export default function HelpPage() {
                 </li>
                 <li className="flex items-start gap-2">
                   <ChevronRight className="w-4 h-4 mt-0.5 text-gray-400" />
-                  <span>添加多个步骤，每个步骤包含系统提示词</span>
+                  <span>添加多个步骤，配置系统提示词和用户消息</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <ChevronRight className="w-4 h-4 mt-0.5 text-gray-400" />
@@ -145,17 +145,17 @@ export default function HelpPage() {
         </div>
       </section>
 
-      {/* 系统提示词详解 */}
+      {/* 消息配置详解 */}
       <section className="mb-10">
         <div className="flex items-center gap-2 mb-4">
           <FileText className="w-6 h-6 text-blue-500" />
-          <h2 className="text-xl font-bold text-gray-900">系统提示词详解</h2>
+          <h2 className="text-xl font-bold text-gray-900">消息配置详解</h2>
         </div>
         <div className="bg-white rounded-lg border border-gray-200 p-6">
           <p className="text-gray-700 mb-6 leading-relaxed">
-            <strong>系统提示词（System Prompt）</strong>是每个步骤发送给 AI 的"指令"，
-            用于告诉 AI 它应该扮演什么角色、执行什么任务、输出什么格式的内容。
-            可以把它理解为给 AI 的"工作说明书"。
+            每个步骤可以配置两种消息：<strong>系统提示词（System）</strong>和<strong>用户消息（User）</strong>。
+            系统提示词定义 AI 的角色和任务，用户消息提供具体的输入内容。
+            如果未设置用户消息，将自动使用输入策略获取的内容。
           </p>
 
           <div className="space-y-6">
@@ -186,11 +186,10 @@ export default function HelpPage() {
               <div className="space-y-3">
                 <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
                   <div className="text-sm text-blue-700 font-medium mb-2">步骤1：文章大纲生成</div>
-                  <pre className="text-sm text-gray-800 whitespace-pre-wrap">
-                    {`你是一位资深的内容策划专家。请根据用户提供的主题，生成一份详细的文章大纲。
-
-输入主题：
-{{input}}
+                  <div className="space-y-2">
+                    <div className="text-xs text-blue-600 font-medium">System</div>
+                    <pre className="text-sm text-gray-800 whitespace-pre-wrap bg-white/50 p-2 rounded">
+                      {`你是一位资深的内容策划专家。请根据用户提供的主题，生成一份详细的文章大纲。
 
 要求：
 1. 大纲包含3-5个主要章节
@@ -199,20 +198,22 @@ export default function HelpPage() {
 4. 在开头简要说明文章的核心观点
 
 请直接输出大纲，不需要其他解释。`}
-                  </pre>
+                    </pre>
+                    <div className="text-xs text-blue-600 font-medium mt-2">User</div>
+                    <pre className="text-sm text-gray-800 whitespace-pre-wrap bg-white/50 p-2 rounded">
+                      {`主题：{{input}}`}
+                    </pre>
+                  </div>
                 </div>
 
                 <div className="text-gray-500 text-sm px-2">↓ 上一步的输出作为下一步的输入</div>
 
                 <div className="bg-green-50 rounded-lg p-4 border border-green-200">
                   <div className="text-sm text-green-700 font-medium mb-2">步骤2：内容扩写</div>
-                  <pre className="text-sm text-gray-800 whitespace-pre-wrap">
-                    {`你是一位专业的撰稿人。请根据以下大纲，撰写一篇完整的文章。
-
-文章大纲：
-{{input}}
-
-原始主题：{{original_input}}
+                  <div className="space-y-2">
+                    <div className="text-xs text-green-600 font-medium">System</div>
+                    <pre className="text-sm text-gray-800 whitespace-pre-wrap bg-white/50 p-2 rounded">
+                      {`你是一位专业的撰稿人。请根据提供的大纲，撰写一篇完整的文章。
 
 要求：
 1. 按照大纲结构逐节展开
@@ -221,7 +222,15 @@ export default function HelpPage() {
 4. 在段落之间添加过渡句，保持连贯性
 
 请直接输出文章正文。`}
-                  </pre>
+                    </pre>
+                    <div className="text-xs text-green-600 font-medium mt-2">User</div>
+                    <pre className="text-sm text-gray-800 whitespace-pre-wrap bg-white/50 p-2 rounded">
+                      {`大纲：
+{{input}}
+
+原始主题：{{original_input}}`}
+                    </pre>
+                  </div>
                 </div>
               </div>
             </div>
