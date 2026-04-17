@@ -45,6 +45,17 @@ import {
   getSettings,
 } from "@/lib/db";
 
+// 预设模型选项（用于快速添加）
+const PRESET_MODEL_OPTIONS = PRESET_MODELS.map(m => ({
+  id: m.id,
+  providerId: m.providerId,
+  name: m.name,
+  displayName: m.displayName,
+  description: m.description,
+  contextWindow: m.contextWindow,
+  maxTokens: m.maxTokens,
+}));
+
 // 内置供应商选项
 const BUILTIN_PROVIDERS = [
   { id: "openai", name: "OpenAI" },
@@ -354,6 +365,59 @@ export function ModelManagement() {
                   ))}
                 </SelectContent>
               </Select>
+            </div>
+
+            {/* 预设模型选择 */}
+            <div className="space-y-2">
+              <Label>选择预设模型</Label>
+              <Select
+                value={newModel.name || "custom"}
+                onValueChange={(value) => {
+                  if (value === "custom") {
+                    setNewModel({
+                      ...newModel,
+                      name: "",
+                      displayName: "",
+                      description: "",
+                      contextWindow: 128000,
+                      maxTokens: 4096,
+                    });
+                  } else {
+                    const preset = PRESET_MODEL_OPTIONS.find((m) => m.name === value);
+                    if (preset) {
+                      setNewModel({
+                        ...newModel,
+                        providerId: preset.providerId,
+                        name: preset.name,
+                        displayName: preset.displayName,
+                        description: preset.description || "",
+                        contextWindow: preset.contextWindow,
+                        maxTokens: preset.maxTokens,
+                      });
+                    }
+                  }
+                }}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="选择预设模型或自定义" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="custom">📝 自定义模型</SelectItem>
+                  {PRESET_MODEL_OPTIONS.filter(
+                    (m) => !newModel.providerId || m.providerId === newModel.providerId
+                  ).map((model) => (
+                    <SelectItem key={model.id} value={model.name}>
+                      <span className="flex items-center gap-2">
+                        <span className="text-muted-foreground text-xs">[{model.providerId}]</span>
+                        {model.displayName}
+                      </span>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <p className="text-xs text-muted-foreground">
+                选择预设模型自动填充参数，或选择"自定义"手动配置
+              </p>
             </div>
 
             <div className="grid gap-4 md:grid-cols-2">

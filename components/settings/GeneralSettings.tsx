@@ -24,7 +24,7 @@ import {
   AlertTriangle,
 } from "lucide-react";
 import { UserSettings } from "@/types";
-import { getSettings, saveSettings, db, migrateModels } from "@/lib/db";
+import { getSettings, saveSettings, db, migrateModels, getModels } from "@/lib/db";
 import {
   Dialog,
   DialogContent,
@@ -40,13 +40,32 @@ export function GeneralSettings() {
   const [isClearDialogOpen, setIsClearDialogOpen] = useState(false);
   const [exportData, setExportData] = useState<string>("");
   const [importData, setImportData] = useState<string>("");
+  const [availableModels, setAvailableModels] = useState<Array<{ id: string; name: string; displayName: string }>>([]);
 
   useEffect(() => {
     const loaded = getSettings();
     setSettings(loaded);
     // 确保模型数据已迁移
     migrateModels();
+    // 加载可用模型
+    loadAvailableModels(loaded.defaultProvider);
   }, []);
+
+  // 加载指定供应商的可用模型
+  const loadAvailableModels = (providerId: string) => {
+    const models = getModels().filter(
+      (m) => m.providerId === providerId && m.enabled
+    );
+    setAvailableModels(
+      models.map((m) => ({ id: m.id, name: m.name, displayName: m.displayName }))
+    );
+  };
+
+  // 更新供应商时同时更新可用模型
+  const handleProviderChange = (providerId: string) => {
+    updateSettings({ defaultProvider: providerId, defaultModel: "" });
+    loadAvailableModels(providerId);
+  };
 
   const updateSettings = (updates: Partial<UserSettings>) => {
     if (!settings) return;
@@ -180,7 +199,7 @@ export function GeneralSettings() {
               <Label>默认供应商</Label>
               <Select
                 value={settings.defaultProvider}
-                onValueChange={(value) => updateSettings({ defaultProvider: value })}
+                onValueChange={handleProviderChange}
               >
                 <SelectTrigger>
                   <SelectValue />
@@ -201,11 +220,30 @@ export function GeneralSettings() {
             </div>
             <div className="space-y-2">
               <Label>默认模型</Label>
-              <Input
+              <Select
                 value={settings.defaultModel}
-                onChange={(e) => updateSettings({ defaultModel: e.target.value })}
-                placeholder="例如：gpt-4"
-              />
+                onValueChange={(value) => updateSettings({ defaultModel: value })}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="选择默认模型" />
+                </SelectTrigger>
+                <SelectContent>
+                  {availableModels.length > 0 ? (
+                    availableModels.map((model) => (
+                      <SelectItem key={model.id} value={model.name}>
+                        {model.displayName}
+                      </SelectItem>
+                    ))
+                  ) : (
+                    <SelectItem value="" disabled>
+                      该供应商暂无可用模型
+                    </SelectItem>
+                  )}
+                </SelectContent>
+              </Select>
+              <p className="text-xs text-muted-foreground">
+                请先选择供应商，然后从该供应商的可用模型中选择
+              </p>
             </div>
           </div>
 

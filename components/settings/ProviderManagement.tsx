@@ -34,7 +34,7 @@ import {
   AlertCircle,
 } from "lucide-react";
 import { CustomProviderConfig, UserSettings, ProviderCategory } from "@/types";
-import { getSettings, saveSettings, encryptApiKey, decryptApiKey } from "@/lib/db";
+import { getSettings, saveSettings, encryptApiKey, decryptApiKey, getModels } from "@/lib/db";
 import { getModelCountByProvider } from "@/lib/db";
 
 // 内置供应商配置
@@ -347,13 +347,28 @@ export function ProviderManagement() {
                       </div>
                       <div className="space-y-2">
                         <Label>默认模型</Label>
-                        <Input
-                          placeholder="例如: gpt-4"
+                        <Select
                           value={config?.defaultModel || ""}
-                          onChange={(e) =>
-                            updateProviderDefaultModel(provider.id, e.target.value)
+                          onValueChange={(value) =>
+                            updateProviderDefaultModel(provider.id, value)
                           }
-                        />
+                        >
+                          <SelectTrigger>
+                            <SelectValue placeholder="选择默认模型" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {getModels()
+                              .filter((m) => m.providerId === provider.id && m.enabled)
+                              .map((model) => (
+                                <SelectItem key={model.id} value={model.name}>
+                                  {model.displayName}
+                                </SelectItem>
+                              ))}
+                          </SelectContent>
+                        </Select>
+                        <p className="text-xs text-muted-foreground">
+                          从已启用的模型中选择
+                        </p>
                       </div>
                     </div>
                     <div className="flex items-center gap-2">
@@ -546,6 +561,9 @@ export function ProviderManagement() {
                   setNewProvider({ ...newProvider, defaultModel: e.target.value })
                 }
               />
+              <p className="text-xs text-muted-foreground">
+                添加供应商后，可在模型管理中关联模型并在此处选择
+              </p>
             </div>
             <div className="flex items-center gap-2">
               <Switch
@@ -646,15 +664,31 @@ export function ProviderManagement() {
               </div>
               <div className="space-y-2">
                 <Label>默认模型</Label>
-                <Input
+                <Select
                   value={editingCustomProvider.defaultModel}
-                  onChange={(e) =>
+                  onValueChange={(value) =>
                     setEditingCustomProvider({
                       ...editingCustomProvider,
-                      defaultModel: e.target.value,
+                      defaultModel: value,
                     })
                   }
-                />
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="选择默认模型" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {getModels()
+                      .filter((m) => m.providerId === editingCustomProvider.id && m.enabled)
+                      .map((model) => (
+                        <SelectItem key={model.id} value={model.name}>
+                          {model.displayName}
+                        </SelectItem>
+                      ))}
+                  </SelectContent>
+                </Select>
+                <p className="text-xs text-muted-foreground">
+                  从已启用的模型中选择
+                </p>
               </div>
             </div>
           )}

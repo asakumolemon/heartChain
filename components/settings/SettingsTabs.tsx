@@ -8,7 +8,7 @@ import ModelManagement from "./ModelManagement";
 import GeneralSettings from "./GeneralSettings";
 
 export function SettingsTabs() {
-  const [activeTab, setActiveTab] = useState("providers");
+  const [activeTab, setActiveTab] = useState("general");
 
   return (
     <Tabs
