@@ -91,6 +91,7 @@ export interface UserSettings {
   theme: 'light' | 'dark' | 'system';
   language: 'zh' | 'en';
   dataVersion: string;
+  webdav?: WebDAVConfig;
 }
 
 export interface ProviderConfig {
@@ -147,6 +148,16 @@ export interface ChainTemplate {
   description: string;
   category: string;
   chain: Omit<Chain, 'id' | 'createdAt' | 'updatedAt'>;
+}
+
+// WebDAV 配置
+export interface WebDAVConfig {
+  enabled: boolean;
+  serverUrl: string;
+  username: string;
+  password: string;
+  lastSyncAt?: string;
+  syncExecutions: boolean;
 }
 
 // 模型配置
