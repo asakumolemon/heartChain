@@ -204,7 +204,7 @@ export function ModelManagement() {
     <div className="space-y-6">
       <Card>
         <CardHeader>
-          <div className="flex items-center justify-between flex-wrap gap-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
               <CardTitle className="flex items-center gap-2">
                 <Brain className="w-5 h-5" />
@@ -212,20 +212,22 @@ export function ModelManagement() {
               </CardTitle>
               <CardDescription>管理所有 AI 模型配置</CardDescription>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
               <Input
                 placeholder="搜索模型..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-48"
+                className="w-full sm:w-48"
               />
-              <Button variant="outline" onClick={handleResetModels}>
-                重置预设
-              </Button>
-              <Button onClick={() => setIsAddDialogOpen(true)}>
-                <Plus className="w-4 h-4 mr-2" />
-                添加模型
-              </Button>
+              <div className="flex items-center gap-2">
+                <Button variant="outline" onClick={handleResetModels} className="flex-1 sm:flex-none">
+                  重置预设
+                </Button>
+                <Button onClick={() => setIsAddDialogOpen(true)} className="flex-1 sm:flex-none">
+                  <Plus className="w-4 h-4 mr-2" />
+                  添加模型
+                </Button>
+              </div>
             </div>
           </div>
         </CardHeader>
@@ -234,8 +236,9 @@ export function ModelManagement() {
             <div className="space-y-4">
               {groupedModels.map(({ provider, models: providerModels }) => (
                 <div key={provider.id} className="border rounded-lg overflow-hidden">
-                  <button
-                    className="w-full flex items-center justify-between p-4 bg-muted/30 hover:bg-muted/50 transition-colors"
+                  <Button
+                    variant="ghost"
+                    className="w-full flex items-center justify-between p-4 h-auto hover:bg-muted/50"
                     onClick={() => toggleProviderExpand(provider.id)}
                   >
                     <div className="flex items-center gap-3">
@@ -252,57 +255,54 @@ export function ModelManagement() {
                         {providerModels.filter((m) => m.enabled).length} 个启用
                       </Badge>
                     </div>
-                  </button>
+                  </Button>
 
                   {expandedProviders.includes(provider.id) && (
                     <div className="p-4 space-y-3">
                       {providerModels.map((model) => (
                         <div
                           key={model.id}
-                          className={`flex items-center justify-between p-3 rounded-lg border transition-all ${
+                          className={`flex flex-col sm:flex-row sm:items-center justify-between p-3 rounded-lg border gap-3 transition-all ${
                             model.enabled
                               ? "border-primary/30 bg-primary/5"
                               : "border-border bg-muted/20"
                           }`}
                         >
-                          <div className="flex items-center gap-3">
-                            <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                          <div className="flex items-center gap-3 min-w-0 flex-1">
+                            <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
                               <Sparkles className="w-4 h-4 text-primary" />
                             </div>
-                            <div>
-                              <div className="flex items-center gap-2">
+                            <div className="min-w-0 flex-1">
+                              <div className="flex items-center gap-2 flex-wrap">
                                 <span className="font-medium">{model.displayName}</span>
                                 {model.isCustom && (
                                   <Badge variant="outline" className="text-xs">
                                     自定义
                                   </Badge>
                                 )}
-                                {model.enabled ? (
-                                  <Badge variant="default" className="text-xs">
-                                    已启用
-                                  </Badge>
-                                ) : (
-                                  <Badge variant="secondary" className="text-xs">
-                                    已禁用
-                                  </Badge>
-                                )}
+                                <Badge variant={model.enabled ? "default" : "secondary"} className="text-xs">
+                                  {model.enabled ? "已启用" : "已禁用"}
+                                </Badge>
                               </div>
-                              <div className="flex items-center gap-2 text-xs text-muted-foreground mt-1">
-                                <span>{model.name}</span>
+                              <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-xs text-muted-foreground mt-1">
+                                <span className="truncate max-w-[200px] sm:max-w-none">{model.name}</span>
                                 {model.contextWindow && (
-                                  <span>· 上下文 {model.contextWindow.toLocaleString()}</span>
+                                  <span className="shrink-0">· 上下文 {(model.contextWindow / 1000).toFixed(0)}K</span>
                                 )}
                                 {model.maxTokens && (
-                                  <span>· 最大 {model.maxTokens.toLocaleString()} tokens</span>
+                                  <span className="shrink-0">· 最大 {(model.maxTokens / 1000).toFixed(0)}K tokens</span>
                                 )}
-                                {model.description && <span>· {model.description}</span>}
+                                {model.description && (
+                                  <span className="truncate max-w-full">· {model.description}</span>
+                                )}
                               </div>
                             </div>
                           </div>
-                          <div className="flex items-center gap-2">
+                          <div className="flex items-center gap-1 sm:gap-2 shrink-0 self-end sm:self-auto">
                             <Button
                               variant="ghost"
-                              size="sm"
+                              size="icon"
+                              className="h-8 w-8"
                               onClick={() => setEditingModel(model)}
                             >
                               <Edit2 className="w-4 h-4" />
@@ -310,7 +310,8 @@ export function ModelManagement() {
                             {model.isCustom && (
                               <Button
                                 variant="ghost"
-                                size="sm"
+                                size="icon"
+                                className="h-8 w-8"
                                 onClick={() => handleDeleteModel(model.id)}
                               >
                                 <Trash2 className="w-4 h-4 text-destructive" />

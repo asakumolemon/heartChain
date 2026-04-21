@@ -7,6 +7,7 @@ import { generateId } from '@/lib/db';
 import { Chain } from '@/types';
 import { FileText, ChevronRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
 
 interface TemplateSelectorProps {
   onSelect: (chain: Omit<Chain, 'id' | 'createdAt' | 'updatedAt'>) => void;
@@ -39,40 +40,35 @@ export function TemplateSelector({ onSelect }: TemplateSelectorProps) {
 
       {/* 分类筛选 */}
       <div className="flex flex-wrap gap-2">
-        <button
+        <Button
+          variant={selectedCategory === null ? 'default' : 'secondary'}
+          size="sm"
           onClick={() => setSelectedCategory(null)}
-          className={cn(
-            'px-3 py-1.5 text-sm rounded-full transition-colors',
-            selectedCategory === null
-              ? 'bg-blue-500 text-white'
-              : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-          )}
+          className="rounded-full"
         >
           全部
-        </button>
+        </Button>
         {categories.map((category) => (
-          <button
+          <Button
             key={category}
+            variant={selectedCategory === category ? 'default' : 'secondary'}
+            size="sm"
             onClick={() => setSelectedCategory(category)}
-            className={cn(
-              'px-3 py-1.5 text-sm rounded-full transition-colors',
-              selectedCategory === category
-                ? 'bg-blue-500 text-white'
-                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-            )}
+            className="rounded-full"
           >
             {category}
-          </button>
+          </Button>
         ))}
       </div>
 
       {/* 模板列表 */}
       <div className="grid gap-3">
         {filteredTemplates.map((template) => (
-          <button
+          <Button
             key={template.id}
+            variant="outline"
             onClick={() => handleSelectTemplate(template)}
-            className="flex items-start gap-3 p-4 text-left bg-white border border-gray-200 rounded-lg hover:border-blue-300 hover:shadow-sm transition-all"
+            className="flex items-start gap-3 p-4 h-auto text-left justify-start hover:border-primary hover:shadow-sm transition-all"
           >
             <div className="p-2 bg-blue-50 rounded-lg">
               <FileText className="w-5 h-5 text-blue-500" />
@@ -89,8 +85,8 @@ export function TemplateSelector({ onSelect }: TemplateSelectorProps) {
                 <span>{template.chain.steps.length} 个步骤</span>
               </div>
             </div>
-            <ChevronRight className="w-5 h-5 text-gray-300" />
-          </button>
+            <ChevronRight className="w-5 h-5 text-muted-foreground" />
+          </Button>
         ))}
       </div>
     </div>

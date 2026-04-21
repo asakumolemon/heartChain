@@ -4,8 +4,12 @@ import { useEffect, useState } from 'react';
 import { Chain } from '@/types';
 import { db } from '@/lib/db';
 import { ChainCard } from '@/components/chain/ChainCard';
-import { Plus, FileText } from 'lucide-react';
+import { Plus, FileText, ListPlus } from 'lucide-react';
 import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import { Skeleton } from '@/components/ui/skeleton';
+import { ChainCardSkeleton } from '@/components/chain/ChainCardSkeleton';
+import { EmptyState } from '@/components/empty-state';
 
 export default function HomePage() {
   const [chains, setChains] = useState<Chain[]>([]);
@@ -42,8 +46,17 @@ export default function HomePage() {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+      <div className="space-y-6">
+        <div className="flex items-center justify-between">
+          <div className="space-y-2">
+            <Skeleton className="h-8 w-32" />
+            <Skeleton className="h-4 w-48" />
+          </div>
+          <Skeleton className="h-10 w-32" />
+        </div>
+        {Array.from({ length: 3 }).map((_, i) => (
+          <ChainCardSkeleton key={i} />
+        ))}
       </div>
     );
   }
@@ -56,29 +69,22 @@ export default function HomePage() {
           <h1 className="text-2xl font-bold text-gray-900">提示链</h1>
           <p className="text-gray-500 mt-1">管理和执行您的 AI 提示链工作流</p>
         </div>
-        <Link
-          href="/chains/new"
-          className="flex items-center gap-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
-        >
-          <Plus className="w-4 h-4" />
-          新建提示链
-        </Link>
+        <Button asChild>
+          <Link href="/chains/new">
+            <Plus className="w-4 h-4" />
+            新建提示链
+          </Link>
+        </Button>
       </div>
 
       {/* 提示链列表 */}
       {chains.length === 0 ? (
-        <div className="text-center py-16 bg-white rounded-lg border border-gray-200">
-          <FileText className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-          <h3 className="text-lg font-medium text-gray-900 mb-2">还没有提示链</h3>
-          <p className="text-gray-500 mb-4">创建您的第一个提示链，开始自动化 AI 工作流</p>
-          <Link
-            href="/chains/new"
-            className="inline-flex items-center gap-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
-          >
-            <Plus className="w-4 h-4" />
-            新建提示链
-          </Link>
-        </div>
+        <EmptyState
+          icon={FileText}
+          title="还没有提示链"
+          description="创建您的第一个提示链，开始自动化 AI 工作流。提示链可以将复杂任务分解为多个步骤执行。"
+          action={{ label: "新建提示链", href: "/chains/new" }}
+        />
       ) : (
         <div className="grid gap-4">
           {chains.map((chain) => (

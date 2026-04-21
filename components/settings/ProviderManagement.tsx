@@ -285,11 +285,11 @@ export function ProviderManagement() {
                   isEnabled ? "border-primary/50 bg-primary/5" : "border-border"
                 }`}
               >
-                <div className="flex items-start justify-between">
-                  <div className="flex items-center gap-3">
-                    <span className="text-2xl">{provider.icon}</span>
-                    <div>
-                      <div className="flex items-center gap-2">
+                <div className="flex items-start justify-between gap-3">
+                  <div className="flex items-center gap-3 min-w-0 flex-1">
+                    <span className="text-2xl shrink-0">{provider.icon}</span>
+                    <div className="min-w-0">
+                      <div className="flex items-center gap-2 flex-wrap">
                         <h4 className="font-medium">{provider.name}</h4>
                         {isEnabled ? (
                           <Badge variant="default" className="text-xs">
@@ -306,10 +306,11 @@ export function ProviderManagement() {
                       </p>
                     </div>
                   </div>
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-1 sm:gap-2 shrink-0">
                     <Button
                       variant="ghost"
-                      size="sm"
+                      size="icon"
+                      className="h-8 w-8"
                       onClick={() => setEditingProvider(isEditing ? null : provider.id)}
                     >
                       {isEditing ? (

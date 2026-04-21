@@ -5,9 +5,11 @@ import { useRouter } from 'next/navigation';
 import { Chain, Step } from '@/types';
 import { db, generateId } from '@/lib/db';
 import { StepEditor } from '@/components/chain/StepEditor';
-import { Plus, Save, ArrowLeft, LayoutTemplate } from 'lucide-react';
+import { Plus, Save, ArrowLeft, LayoutTemplate, ListPlus } from 'lucide-react';
 import { TemplateSelector } from '@/components/chain/TemplateSelector';
 import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import { EmptyState } from '@/components/empty-state';
 import {
   DndContext,
   closestCenter,
@@ -172,38 +174,30 @@ export default function NewChainPage() {
   return (
     <div className="max-w-4xl mx-auto">
       {/* 返回按钮 */}
-      <Link
-        href="/"
-        className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-6"
-      >
-        <ArrowLeft className="w-4 h-4" />
-        返回列表
-      </Link>
+      <Button variant="ghost" asChild className="mb-6">
+        <Link href="/">
+          <ArrowLeft className="w-4 h-4" />
+          返回列表
+        </Link>
+      </Button>
 
       {/* 页面标题 */}
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold text-gray-900">新建提示链</h1>
-        <button
-          onClick={handleSave}
-          disabled={isSaving}
-          className="flex items-center gap-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:bg-gray-300 transition-colors"
-        >
+        <Button onClick={handleSave} disabled={isSaving}>
           <Save className="w-4 h-4" />
           {isSaving ? '保存中...' : '保存'}
-        </button>
+        </Button>
       </div>
 
       {/* 模板选择 */}
       <div className="bg-white border border-gray-200 rounded-lg p-6 mb-6">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-lg font-semibold text-gray-900">快速开始</h2>
-          <button
-            onClick={() => setShowTemplates(!showTemplates)}
-            className="flex items-center gap-2 px-3 py-1.5 text-sm bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors"
-          >
+          <Button variant="outline" size="sm" onClick={() => setShowTemplates(!showTemplates)}>
             <LayoutTemplate className="w-4 h-4" />
             {showTemplates ? '隐藏模板' : '使用模板'}
-          </button>
+          </Button>
         </div>
 
         {showTemplates && (
@@ -247,19 +241,18 @@ export default function NewChainPage() {
           <h2 className="text-lg font-semibold text-gray-900">
             步骤 ({steps.length})
           </h2>
-          <button
-            onClick={addStep}
-            className="flex items-center gap-2 px-3 py-1.5 text-sm bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
-          >
+          <Button variant="secondary" size="sm" onClick={addStep}>
             <Plus className="w-4 h-4" />
             添加步骤
-          </button>
+          </Button>
         </div>
 
         {steps.length === 0 ? (
-          <div className="text-center py-12 bg-gray-50 rounded-lg border border-dashed border-gray-300">
-            <p className="text-gray-500">还没有步骤，点击上方按钮添加</p>
-          </div>
+          <EmptyState
+            icon={ListPlus}
+            title="还没有步骤"
+            description='点击上方"添加步骤"按钮开始构建您的提示链。每个步骤都可以配置不同的模型和提示词。'
+          />
         ) : (
           <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
             <SortableContext items={steps.map((s) => s.id)} strategy={verticalListSortingStrategy}>

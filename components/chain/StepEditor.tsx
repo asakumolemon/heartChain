@@ -6,6 +6,7 @@ import { useState, useEffect } from 'react';
 import { GripVertical, Trash2, ChevronDown, ChevronUp } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { getSettings } from '@/lib/db';
+import { Button } from '@/components/ui/button';
 
 interface StepEditorProps {
   step: Step;
@@ -51,18 +52,12 @@ export function StepEditor({ step, index, onChange, onDelete, dragHandleProps }:
           placeholder="步骤名称"
           className="flex-1 bg-transparent border-none focus:ring-0 font-medium"
         />
-        <button
-          onClick={() => setIsExpanded(!isExpanded)}
-          className="p-1 hover:bg-gray-200 rounded"
-        >
+        <Button variant="ghost" size="icon" onClick={() => setIsExpanded(!isExpanded)}>
           {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-        </button>
-        <button
-          onClick={onDelete}
-          className="p-1 hover:bg-red-100 text-red-500 rounded"
-        >
+        </Button>
+        <Button variant="ghost" size="icon" onClick={onDelete} className="text-red-500 hover:text-red-500 hover:bg-red-50">
           <Trash2 className="w-4 h-4" />
-        </button>
+        </Button>
       </div>
 
       {/* 展开内容 */}
@@ -77,7 +72,7 @@ export function StepEditor({ step, index, onChange, onDelete, dragHandleProps }:
               value={step.systemPrompt}
               onChange={(e) => updateField('systemPrompt', e.target.value)}
               placeholder="输入系统提示词，定义 AI 的角色和任务..."
-              className="w-full h-24 p-3 border border-gray-300 rounded-lg resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full min-h-[120px] sm:h-24 p-3 border border-gray-300 rounded-lg resize-y focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
             <p className="text-xs text-gray-500 mt-1">
               定义 AI 的角色、任务要求和输出格式
@@ -93,7 +88,7 @@ export function StepEditor({ step, index, onChange, onDelete, dragHandleProps }:
               value={step.userPrompt || ''}
               onChange={(e) => updateField('userPrompt', e.target.value)}
               placeholder="输入用户消息内容，可使用 {input} {original_input} 等变量..."
-              className="w-full h-24 p-3 border border-gray-300 rounded-lg resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full min-h-[120px] sm:h-24 p-3 border border-gray-300 rounded-lg resize-y focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
             <p className="text-xs text-gray-500 mt-1">
               可用变量: {'{input}'}, {'{original_input}'}, {'{step}'}, {'{total_steps}'}, {'{prev_result}'}, {'{history}'}
@@ -203,19 +198,13 @@ export function StepEditor({ step, index, onChange, onDelete, dragHandleProps }:
             <div className="flex items-center justify-between mb-2">
               <label className="text-sm font-medium text-gray-700">条件分支 (可选)</label>
               {step.condition ? (
-                <button
-                  onClick={() => updateField('condition', undefined)}
-                  className="text-xs text-red-500 hover:text-red-600"
-                >
+                <Button variant="ghost" size="sm" onClick={() => updateField('condition', undefined)} className="text-red-500 hover:text-red-600 h-auto py-1 px-2">
                   删除条件
-                </button>
+                </Button>
               ) : (
-                <button
-                  onClick={() => updateField('condition', { type: 'contains', value: '', targetStepId: '' })}
-                  className="text-xs text-blue-500 hover:text-blue-600"
-                >
+                <Button variant="ghost" size="sm" onClick={() => updateField('condition', { type: 'contains', value: '', targetStepId: '' })} className="text-primary hover:text-primary h-auto py-1 px-2">
                   添加条件
-                </button>
+                </Button>
               )}
             </div>
 

@@ -121,12 +121,12 @@ export function ChainStepCard({
           </div>
 
           {/* 状态和查看按钮 */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1 sm:gap-2">
             {(status === 'completed' || status === 'failed' || status === 'streaming') && (
               <Button
                 variant="ghost"
-                size="sm"
-                className="h-8 w-8 p-0"
+                size="icon"
+                className="h-9 w-9 sm:h-8 sm:w-8"
                 onClick={(e) => {
                   e.stopPropagation();
                   setIsDetailOpen(true);

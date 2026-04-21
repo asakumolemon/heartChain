@@ -98,7 +98,7 @@ export function ChainExecutionContainer({ chain, onExecutionComplete }: ChainExe
           placeholder="请输入要处理的内容..."
           disabled={isExecuting}
           className={cn(
-            'w-full h-32 p-3 border border-gray-300 rounded-lg resize-none',
+            'w-full min-h-[120px] sm:h-32 p-3 border border-gray-300 rounded-lg resize-y',
             'focus:ring-2 focus:ring-blue-500 focus:border-transparent',
             'disabled:bg-gray-100 disabled:cursor-not-allowed'
           )}
@@ -109,36 +109,21 @@ export function ChainExecutionContainer({ chain, onExecutionComplete }: ChainExe
           </div>
           <div className="flex gap-2">
             {execution && !isExecuting && (
-              <button
-                onClick={resetExecution}
-                className="flex items-center gap-2 px-4 py-2 text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
-              >
+              <Button variant="secondary" onClick={resetExecution}>
                 <RotateCcw className="w-4 h-4" />
                 重新开始
-              </button>
+              </Button>
             )}
             {isExecuting ? (
-              <button
-                onClick={cancelExecution}
-                className="flex items-center gap-2 px-4 py-2 text-white bg-red-500 rounded-lg hover:bg-red-600 transition-colors"
-              >
+              <Button variant="destructive" onClick={cancelExecution}>
                 <Square className="w-4 h-4" />
                 停止执行
-              </button>
+              </Button>
             ) : (
-              <button
-                onClick={startExecution}
-                disabled={!input.trim()}
-                className={cn(
-                  'flex items-center gap-2 px-4 py-2 text-white rounded-lg transition-colors',
-                  input.trim()
-                    ? 'bg-blue-500 hover:bg-blue-600'
-                    : 'bg-gray-300 cursor-not-allowed'
-                )}
-              >
+              <Button onClick={startExecution} disabled={!input.trim()}>
                 <Play className="w-4 h-4" />
                 开始执行
-              </button>
+              </Button>
             )}
           </div>
         </div>

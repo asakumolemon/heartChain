@@ -5,8 +5,10 @@ import { useRouter, useParams } from 'next/navigation';
 import { Chain, Step } from '@/types';
 import { db, generateId } from '@/lib/db';
 import { StepEditor } from '@/components/chain/StepEditor';
-import { Plus, Save, ArrowLeft, Trash2 } from 'lucide-react';
+import { Plus, Save, ArrowLeft, Trash2, ListPlus } from 'lucide-react';
 import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import { EmptyState } from '@/components/empty-state';
 import {
   DndContext,
   closestCenter,
@@ -203,33 +205,25 @@ export default function EditChainPage() {
   return (
     <div className="max-w-4xl mx-auto">
       {/* 返回按钮 */}
-      <Link
-        href="/"
-        className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-6"
-      >
-        <ArrowLeft className="w-4 h-4" />
-        返回列表
-      </Link>
+      <Button variant="ghost" asChild className="mb-6">
+        <Link href="/">
+          <ArrowLeft className="w-4 h-4" />
+          返回列表
+        </Link>
+      </Button>
 
       {/* 页面标题 */}
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold text-gray-900">编辑提示链</h1>
         <div className="flex items-center gap-2">
-          <button
-            onClick={handleDelete}
-            className="flex items-center gap-2 px-4 py-2 text-red-600 bg-red-50 rounded-lg hover:bg-red-100 transition-colors"
-          >
+          <Button variant="destructive" onClick={handleDelete}>
             <Trash2 className="w-4 h-4" />
             删除
-          </button>
-          <button
-            onClick={handleSave}
-            disabled={isSaving}
-            className="flex items-center gap-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:bg-gray-300 transition-colors"
-          >
+          </Button>
+          <Button onClick={handleSave} disabled={isSaving}>
             <Save className="w-4 h-4" />
             {isSaving ? '保存中...' : '保存'}
-          </button>
+          </Button>
         </div>
       </div>
 
@@ -269,19 +263,18 @@ export default function EditChainPage() {
           <h2 className="text-lg font-semibold text-gray-900">
             步骤 ({steps.length})
           </h2>
-          <button
-            onClick={addStep}
-            className="flex items-center gap-2 px-3 py-1.5 text-sm bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
-          >
+          <Button variant="secondary" size="sm" onClick={addStep}>
             <Plus className="w-4 h-4" />
             添加步骤
-          </button>
+          </Button>
         </div>
 
         {steps.length === 0 ? (
-          <div className="text-center py-12 bg-gray-50 rounded-lg border border-dashed border-gray-300">
-            <p className="text-gray-500">还没有步骤，点击上方按钮添加</p>
-          </div>
+          <EmptyState
+            icon={ListPlus}
+            title="还没有步骤"
+            description='点击上方"添加步骤"按钮开始构建您的提示链。每个步骤都可以配置不同的模型和提示词。'
+          />
         ) : (
           <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
             <SortableContext items={steps.map((s) => s.id)} strategy={verticalListSortingStrategy}>
